@@ -15,7 +15,7 @@ const PostsPage = () => {
 
     return (
         <div>
-            <h1>Witamy</h1>
+            <h1>Poster</h1>
             {!isLoggedIn ? (
                 <LoginComponent onLogin={handleLogin} />
             ) : (
