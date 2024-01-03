@@ -29,6 +29,15 @@ const LoginComponent = ({ onLogin }) => {
 
     return (
         <form onSubmit={handleLogin} className="max-w-sm mx-auto mt-10">
+            <h1 style={{
+                fontSize: '19px',
+                color: '#333',
+                textAlign: 'center',
+                margin: '20px 0',
+                textShadow: '2px 2px 4px rgba(0,0,0,0.2)'
+            }}>
+                Zaloguj się
+            </h1>
             <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">Username:</label>
                 <input

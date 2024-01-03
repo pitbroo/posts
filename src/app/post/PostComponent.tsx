@@ -11,14 +11,15 @@ interface Post {
     description: string;
     comments: Comment[];
 }
-
-const PostComponent: React.FC = () => {
+interface PostComponentProps {
+    token: string;
+}
+const PostComponent: React.FC<PostComponentProps> = ({ token }) => {
     const [posts, setPosts] = useState<Post[]>([]);
 
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIiLCJuYmYiOjE3MDQzMjEwNDEsImV4cCI6MTcwNDkyNTg0MSwiaWF0IjoxNzA0MzIxMDQxfQ.gPiiDvR9VMDpSJmD0EnAJHPg53Myx8MWbz2CMTqDgl8'; // Umieść swój token Bearer
                 const response = await fetch('https://localhost:7102/post', {
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -37,7 +38,7 @@ const PostComponent: React.FC = () => {
         };
 
         fetchPosts();
-    }, []);
+    }, [token]);
 
     const getRandomPhotoUrl = () => {
         const uniqueString = Math.random().toString(36).substr(2, 9); // Generuje losowy ciąg znaków
@@ -48,6 +49,15 @@ const PostComponent: React.FC = () => {
 
     return (
         <div className="container mx-auto p-6">
+            <h1 style={{
+                fontSize: '19px',
+                color: '#333',
+                textAlign: 'center',
+                margin: '20px 0',
+                textShadow: '2px 2px 4px rgba(0,0,0,0.2)'
+            }}>
+                Dodaj post lub komętarz
+            </h1>
             {posts.map((post) => (
                 <div key={post.id} className="mb-8 p-6 bg-white rounded-lg shadow-md">
                     <h2 className="text-3xl font-semibold text-gray-800 mb-4">{post.name}</h2>
