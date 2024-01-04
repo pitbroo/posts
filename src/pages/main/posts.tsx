@@ -20,7 +20,7 @@ const PostsPage = () => {
                 fontSize: '36px',
                 color: '#333',
                 textAlign: 'center',
-                margin: '20px 0',
+                margin: '5px 0',
                 textShadow: '2px 2px 4px rgba(0,0,0,0.2)'
             }}>
                 Poster

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import AddPost from "@/app/post/AddPost";
+import addPost from "@/app/post/AddPost";
 
 interface Comment {
     id: number;
@@ -39,9 +41,12 @@ const PostComponent: React.FC<PostComponentProps> = ({ token }) => {
 
         fetchPosts();
     }, [token]);
+    const handleAddPostSuccess = (newPost: Post) => {
+        setPosts(prevPosts => [newPost, ...prevPosts]);
+    };
 
     const getRandomPhotoUrl = () => {
-        const uniqueString = Math.random().toString(36).substr(2, 9); // Generuje losowy ciąg znaków
+        const uniqueString = Math.random().toString(36).substr(2, 9);
         return `https://source.unsplash.com/random/600x400?sig=${uniqueString}`;
     };
 
@@ -57,6 +62,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ token }) => {
                 textShadow: '2px 2px 4px rgba(0,0,0,0.2)'
             }}>
                 Dodaj post lub komętarz
+                <AddPost token={token} onAddPostSuccess={handleAddPostSuccess} />
             </h1>
             {posts.map((post) => (
                 <div key={post.id} className="mb-8 p-6 bg-white rounded-lg shadow-md">
