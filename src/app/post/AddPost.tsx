@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 
 interface AddPostProps {
-    token: string;
+    userData: UserData;
     onAddPostSuccess: (post: any) => void;
 }
+interface UserData{
+    id: number
+    token: string;
+    firstName: string;
+    lastName: string;
+    username: string;
+}
 
-const AddPost: React.FC<AddPostProps> = ({ token, onAddPostSuccess }) => {
+
+const AddPost: React.FC<AddPostProps> = ({ userData, onAddPostSuccess }) => {
     const [postName, setPostName] = useState('');
     const [postDescription, setPostDescription] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
@@ -15,13 +23,14 @@ const AddPost: React.FC<AddPostProps> = ({ token, onAddPostSuccess }) => {
         const newPost = {
             name: postName,
             description: postDescription,
+            userId: userData.id
         };
 
         try {
             const response = await fetch('https://localhost:7102/Post', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${userData.token}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(newPost),
@@ -43,37 +52,31 @@ const AddPost: React.FC<AddPostProps> = ({ token, onAddPostSuccess }) => {
     };
 
     return (
-        <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div className="bg-gray-50 shadow-md rounded-lg px-6 py-3 mb-4">
             {successMessage && <div className="alert alert-success">{successMessage}</div>}
-            <form onSubmit={handleSubmit}>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="post-name">
-                        Nazwa Postu
-                    </label>
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
                     <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="form-input w-full rounded-md border-gray-300 shadow-sm"
                         id="post-name"
                         type="text"
-                        placeholder="Nazwa postu"
+                        placeholder="Tytuł postu"
                         value={postName}
                         onChange={(e) => setPostName(e.target.value)}
                     />
                 </div>
-                <div className="mb-6">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="post-description">
-                        Opis Postu
-                    </label>
+                <div>
                     <textarea
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                        className="form-textarea w-full rounded-md border-gray-300 shadow-sm"
                         id="post-description"
                         placeholder="Opis postu"
                         value={postDescription}
                         onChange={(e) => setPostDescription(e.target.value)}
                     ></textarea>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-center">
                     <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        className="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                         type="submit"
                     >
                         Dodaj Post
@@ -84,4 +87,4 @@ const AddPost: React.FC<AddPostProps> = ({ token, onAddPostSuccess }) => {
     );
 };
 
-export default AddPost;
+    export default AddPost;

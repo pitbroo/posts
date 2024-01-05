@@ -8,6 +8,7 @@ const LoginComponent = ({ onLogin }) => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
+
     // @ts-ignore
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -16,7 +17,7 @@ const LoginComponent = ({ onLogin }) => {
                 username,
                 password
             });
-            onLogin(response.data.token);
+            onLogin(response.data);
         } catch (error) {
             // @ts-ignore
             if (error.response && error.response.status === 400) {
