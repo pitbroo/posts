@@ -5,13 +5,19 @@ import PostComponent from "@/app/post/PostComponent";
 import LoginComponent from "@/app/login/LoginComponent";
 import UserInformation from "@/app/login/UserInformation";
 
+interface UserData {
+    id: number
+    token: string;
+    firstName: string;
+    lastName: string;
+    username: string;
+}
 const PostsPage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [userData, setUserData] = useState(null);
+    const [userData, setUserData] = useState<UserData | null>(null);
 
 
-    // @ts-ignore
-    const handleLogin = (userData) => {
+    const handleLogin = (userData: UserData) => {
         setIsLoggedIn(true);
         setUserData(userData)
     };
@@ -32,7 +38,6 @@ const PostsPage = () => {
                     src="https://thumbs.dreamstime.com/b/comments-line-icon-speech-bubbles-outline-logo-illustrat-illustration-linear-pictogram-isolated-white-90234461.jpg"
                     alt="Logo" className="w-14 h-14"/>
             </div>
-
             {isLoggedIn && <UserInformation userData={userData} onLogout={handleLogout}/>}
 
             {!isLoggedIn ? (

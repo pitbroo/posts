@@ -37,6 +37,8 @@ interface PostComponentProps {
 
 const PostComponent: React.FC<PostComponentProps> = ({userData}) => {
     const [posts, setPosts] = useState<Post[]>([]);
+    const [editingPost, setEditingPost] = useState(null);
+
     const fetchPosts = async () => {
         try {
             const response = await fetch('https://localhost:7102/post', {
@@ -80,16 +82,37 @@ const PostComponent: React.FC<PostComponentProps> = ({userData}) => {
     const getRandomAvatarUrl = () => {
         return `https://robohash.org/${Math.random().toString(36).substring(7)}`;
     };
+    const startEditing = (post) => {
+        setEditingPost({ ...post });
+    };
+
+    const savePost = async () => {
+        try {
+            const response = await fetch(`https://localhost:7102/post/${editingPost.id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${userData.token}`
+                },
+                body: JSON.stringify(editingPost)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            setPosts(posts.map(post => (post.id === editingPost.id ? { ...post, ...editingPost } : post)));
+            setEditingPost(null);
+        } catch (error) {
+            console.error('Error saving post:', error);
+        }
+    };
+
 
     return (
-        <div className="container mx-auto p-6">
+        <div className="container mx-auto p-6 w-3/5">
             <AddPost userData={userData} onAddPostSuccess={handleAddPostSuccess}/>
             {posts.map((post) => (
                 <div key={post.id} className="mb-8 p-6 bg-white rounded-lg shadow-md">
-                    <div className="flex justify-between">
-                        <h2 className="text-3xl font-semibold text-gray-800 mb-4">{post.name}</h2>
-                    </div>
-                    <p className="text-gray-600 text-base leading-relaxed">{post.description}</p>
                     <div className="flex items-center justify-between">
                         <div className="flex items-center">
                             <img src={getRandomAvatarUrl()} alt="Author's Avatar"
@@ -101,6 +124,11 @@ const PostComponent: React.FC<PostComponentProps> = ({userData}) => {
                     </div>
                     <img src={getRandomPhotoUrl()} alt="Random"
                          className="mt-4 mb-4 max-w-full h-auto rounded-md border border-gray-300"/>
+                    <div className="flex justify-between">
+                        <h2 className="text-3xl font-semibold text-gray-800 mb-4">{post.name}</h2>
+                    </div>
+                    <p className="text-gray-600 text-base leading-relaxed">{post.description}</p>
+
                     {post.comments.length > 0 && (
                         <>
                             <h3 className="text-xl font-semibold mt-6 mb-2">Comments:</h3>
