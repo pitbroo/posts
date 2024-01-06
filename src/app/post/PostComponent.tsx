@@ -37,8 +37,6 @@ interface PostComponentProps {
 
 const PostComponent: React.FC<PostComponentProps> = ({userData}) => {
     const [posts, setPosts] = useState<Post[]>([]);
-    const [editingPost, setEditingPost] = useState(null);
-
     const fetchPosts = async () => {
         try {
             const response = await fetch('https://localhost:7102/post', {
@@ -82,31 +80,6 @@ const PostComponent: React.FC<PostComponentProps> = ({userData}) => {
     const getRandomAvatarUrl = () => {
         return `https://robohash.org/${Math.random().toString(36).substring(7)}`;
     };
-    const startEditing = (post) => {
-        setEditingPost({ ...post });
-    };
-
-    const savePost = async () => {
-        try {
-            const response = await fetch(`https://localhost:7102/post/${editingPost.id}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${userData.token}`
-                },
-                body: JSON.stringify(editingPost)
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            setPosts(posts.map(post => (post.id === editingPost.id ? { ...post, ...editingPost } : post)));
-            setEditingPost(null);
-        } catch (error) {
-            console.error('Error saving post:', error);
-        }
-    };
-
 
     return (
         <div className="container mx-auto p-6 w-3/5">
