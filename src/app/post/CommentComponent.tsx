@@ -23,7 +23,7 @@ interface UserData {
 
 interface CommentComponentProps {
     comment: Comment;
-    userData: UserData; /
+    userData: UserData;
     onCommentDeleted: () => void;
 }
 
